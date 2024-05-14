@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddExpenseView: View {
     
-    var expense: Expenses
+    var expenses: Expenses
     
     @State private var name = ""
     @State private var type = ""
@@ -32,10 +32,16 @@ struct AddExpenseView: View {
                     .keyboardType(.decimalPad)
             }
             .navigationTitle("Add new expense")
+            .toolbar {
+                Button("Save") {
+                    let expenseItem = ExpenseItem(name: name, type: type, amount: amount)
+                    expenses.items.append(expenseItem)
+                }
+            }
         }
     }
 }
 
 #Preview {
-    AddExpenseView(expense: Expenses())
+    AddExpenseView(expenses: Expenses())
 }
