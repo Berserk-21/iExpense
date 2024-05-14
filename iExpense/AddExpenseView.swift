@@ -17,7 +17,7 @@ struct AddExpenseView: View {
     @State private var type = ExpenseType.business
     @State private var amount = 0.0
     
-    let types = [ExpenseType.business, ExpenseType.personnal]
+    let types = ExpenseType.types()
     
     var body: some View {
         NavigationStack {
@@ -48,6 +48,11 @@ struct AddExpenseView: View {
 struct ExpenseType {
     static let business: String = "Business"
     static let personnal: String = "Personnal"
+    
+    static func types() -> [String] {
+        
+        return [business, personnal]
+    }
 }
 
 #Preview {

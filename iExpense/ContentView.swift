@@ -13,45 +13,30 @@ struct ContentView: View {
     @State private var expenses = Expenses()
     @State private var showingAddExpense = false
     
+    let types = ExpenseType.types()
+    
     var body: some View {
         NavigationStack {
             List {
-                Section(ExpenseType.business) {
-                    ForEach(expenses.items.filter({ $0.type == ExpenseType.business })) { item in
-                        HStack {
-                            VStack(alignment: .leading, content: {
-                                Text(item.name)
-                                    .font(.headline)
-                                Text(item.type)
-                            })
-                            
-                            Spacer()
-                            Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                .modifier(AmountStyleModifier(amount: item.amount))
+                ForEach(types, id: \.self) { type in
+                    Section(type) {
+                        ForEach(expenses.items.filter({ $0.type == type })) { item in
+                            HStack {
+                                VStack(alignment: .leading, content: {
+                                    Text(item.name)
+                                        .font(.headline)
+                                    Text(item.type)
+                                })
+                                
+                                Spacer()
+                                Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                    .modifier(AmountStyleModifier(amount: item.amount))
+                            }
                         }
+                        .onDelete(perform: { indexSet in
+                            removeRows(at: indexSet, section: type)
+                        })
                     }
-                    .onDelete(perform: { indexSet in
-                        removeRows(at: indexSet, section: ExpenseType.business)
-                    })
-                }
-                
-                Section(ExpenseType.personnal) {
-                    ForEach(expenses.items.filter({ $0.type == ExpenseType.personnal })) { item in
-                        HStack {
-                            VStack(alignment: .leading, content: {
-                                Text(item.name)
-                                    .font(.headline)
-                                Text(item.type)
-                            })
-                            
-                            Spacer()
-                            Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                                .modifier(AmountStyleModifier(amount: item.amount))
-                        }
-                    }
-                    .onDelete(perform: { indexSet in
-                        removeRows(at: indexSet, section: ExpenseType.personnal)
-                    })
                 }
             }
             .navigationTitle("iExpense")
