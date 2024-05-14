@@ -11,10 +11,7 @@ import Observation
 struct ContentView: View {
     
     @State private var expenses = Expenses()
-    @State private var numbers = [Int]()
-    @State private var currentNumber = 1
     @State private var showingAddExpense = false
-    @AppStorage("TapCount") private var tapCount = 0
     
     var body: some View {
         NavigationStack {
@@ -49,7 +46,9 @@ struct ContentView: View {
     }
     
     func removeRows(at offsets: IndexSet) {
-        numbers.remove(atOffsets: offsets)
+        offsets.forEach { index in
+            expenses.items.remove(at: index)
+        }
     }
 }
 
