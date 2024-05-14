@@ -10,37 +10,28 @@ import Observation
 
 struct ContentView: View {
     
-    @State private var user = User(firstName: "Taylor", lastName: "Swift")
+    @State private var expenses = Expenses()
     @State private var numbers = [Int]()
     @State private var currentNumber = 1
     @State private var showingSheet = false
-//    @State private var tapCount = UserDefaults.standard.integer(forKey: "TapCount")
     @AppStorage("TapCount") private var tapCount = 0
     
     var body: some View {
         NavigationStack {
-            VStack {
-                List {
-                    ForEach(numbers, id: \.self) {
-                        Text("Row \($0)")
-                    }
-                    .onDelete(perform: { indexSet in
-                        removeRows(at: indexSet)
-                    })
+            List {
+                ForEach(expenses.items, id: \.name) { item in
+                    Text(item.name)
                 }
-                
-                Button("Add number") {
-                    numbers.append(currentNumber)
-                    currentNumber += 1
-                    
-                    if let data = try? JSONEncoder().encode(user) {
-                        UserDefaults.standard.set(data, forKey: "UserData")
-                    }
-                }
+                .onDelete(perform: { indexSet in
+                    removeRows(at: indexSet)
+                })
             }
-            .padding()
+            .navigationTitle("iExpense")
             .toolbar {
-                EditButton()
+                Button("Add expense", systemImage: "plus") {
+                    let expense = ExpenseItem(name: "Test", type: "Personal", amount: 5)
+                    expenses.items.append(expense)
+                }
             }
         }
     }
@@ -63,16 +54,15 @@ struct SecondView: View {
     }
 }
 
-// A class has to be observable to allow the view to watch changes of objects from this class.
 @Observable
-class User: Codable {
-    let firstName: String
-    let lastName: String
-    
-    init(firstName: String, lastName: String) {
-        self.firstName = firstName
-        self.lastName = lastName
-    }
+class Expenses {
+    var items = [ExpenseItem]()
+}
+
+struct ExpenseItem {
+    let name: String
+    let type: String
+    let amount: Double
 }
 
 #Preview {
