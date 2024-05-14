@@ -29,6 +29,7 @@ struct ContentView: View {
                         
                         Spacer()
                         Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                            .modifier(AmountStyleModifier(amount: item.amount))
                     }
                 }
                 .onDelete(perform: { indexSet in
@@ -52,15 +53,24 @@ struct ContentView: View {
     }
 }
 
-struct SecondView: View {
+struct AmountStyleModifier: ViewModifier {
     
-    let text: String
+    let amount: Double
     
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View {
-        Button(text) {
-            dismiss()
+    func body(content: Content) -> some View {
+        
+        if amount < 10 {
+            content
+                .font(.title)
+                .foregroundStyle(.green)
+        } else if amount < 100 {
+            content
+                .font(.title)
+                .foregroundStyle(.orange)
+        } else {
+            content
+                .font(.title)
+                .foregroundStyle(.red)
         }
     }
 }
