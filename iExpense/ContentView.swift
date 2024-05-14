@@ -10,19 +10,38 @@ import Observation
 
 struct ContentView: View {
     
-    @State private var user = User()
+    @State private var numbers = [Int]()
+    @State private var currentNumber = 1
     @State private var showingSheet = false
+//    @State private var tapCount = UserDefaults.standard.integer(forKey: "Tap")
+    @AppStorage("TapCount") private var tapCount = 0
     
     var body: some View {
-        VStack {
-            Button("Show sheet") {
-                showingSheet.toggle()
+        NavigationStack {
+            VStack {
+                List {
+                    ForEach(numbers, id: \.self) {
+                        Text("Row \($0)")
+                    }
+                    .onDelete(perform: { indexSet in
+                        removeRows(at: indexSet)
+                    })
+                }
+                
+                Button("Add number") {
+                    numbers.append(currentNumber)
+                    currentNumber += 1
+                }
             }
-            .sheet(isPresented: $showingSheet, content: {
-                SecondView(text: "Dismiss me")
-            })
+            .padding()
+            .toolbar {
+                EditButton()
+            }
         }
-        .padding()
+    }
+    
+    func removeRows(at offsets: IndexSet) {
+        numbers.remove(atOffsets: offsets)
     }
 }
 
