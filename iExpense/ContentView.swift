@@ -16,22 +16,43 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(expenses.items) { item in
-                    HStack {
-                        VStack(alignment: .leading, content: {
-                            Text(item.name)
-                                .font(.headline)
-                            Text(item.type)
-                        })
-                        
-                        Spacer()
-                        Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
-                            .modifier(AmountStyleModifier(amount: item.amount))
+                Section(ExpenseType.business) {
+                    ForEach(expenses.items.filter({ $0.type == ExpenseType.business })) { item in
+                        HStack {
+                            VStack(alignment: .leading, content: {
+                                Text(item.name)
+                                    .font(.headline)
+                                Text(item.type)
+                            })
+                            
+                            Spacer()
+                            Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                .modifier(AmountStyleModifier(amount: item.amount))
+                        }
                     }
+                    .onDelete(perform: { indexSet in
+                        removeRows(at: indexSet, section: ExpenseType.business)
+                    })
                 }
-                .onDelete(perform: { indexSet in
-                    removeRows(at: indexSet)
-                })
+                
+                Section(ExpenseType.personnal) {
+                    ForEach(expenses.items.filter({ $0.type == ExpenseType.personnal })) { item in
+                        HStack {
+                            VStack(alignment: .leading, content: {
+                                Text(item.name)
+                                    .font(.headline)
+                                Text(item.type)
+                            })
+                            
+                            Spacer()
+                            Text(item.amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
+                                .modifier(AmountStyleModifier(amount: item.amount))
+                        }
+                    }
+                    .onDelete(perform: { indexSet in
+                        removeRows(at: indexSet, section: ExpenseType.personnal)
+                    })
+                }
             }
             .navigationTitle("iExpense")
             .toolbar {
@@ -45,9 +66,19 @@ struct ContentView: View {
         }
     }
     
-    func removeRows(at offsets: IndexSet) {
+    func removeRows(at offsets: IndexSet, section: String) {
+        
+        let filteredItems = expenses.items.filter({ $0.type == section })
+        
+        guard filteredItems.count > 0 else { return }
+        
         offsets.forEach { index in
-            expenses.items.remove(at: index)
+            
+            guard index < filteredItems.count else { return }
+            
+            let removedItemID = filteredItems[index].id
+            
+            expenses.items.removeAll(where: { $0.id == removedItemID })
         }
     }
 }
