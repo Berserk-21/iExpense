@@ -13,7 +13,7 @@ struct ContentView: View {
     @State private var expenses = Expenses()
     @State private var numbers = [Int]()
     @State private var currentNumber = 1
-    @State private var showingSheet = false
+    @State private var showingAddExpense = false
     @AppStorage("TapCount") private var tapCount = 0
     
     var body: some View {
@@ -29,9 +29,11 @@ struct ContentView: View {
             .navigationTitle("iExpense")
             .toolbar {
                 Button("Add expense", systemImage: "plus") {
-                    let expense = ExpenseItem(name: "Test", type: "Personal", amount: 5)
-                    expenses.items.append(expense)
+                    showingAddExpense = true
                 }
+                .sheet(isPresented: $showingAddExpense, content: {
+                    AddExpenseView(expense: expenses)
+                })
             }
         }
     }
