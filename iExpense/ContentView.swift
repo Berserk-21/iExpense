@@ -58,11 +58,30 @@ struct SecondView: View {
 
 @Observable
 class Expenses {
-    var items = [ExpenseItem]()
+    var items = [ExpenseItem]() {
+        didSet {
+            // Saves to UserDefaults each new expense item.
+            if let encoded = try? JSONEncoder().encode(items) {
+                UserDefaults.standard.setValue(encoded, forKey: "Items")
+            }
+        }
+    }
+    
+    init() {
+        // Loads expense items from UserDefaults at init.
+        if let savedItems = UserDefaults.standard.data(forKey: "Items") {
+            if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems) {
+                items = decodedItems
+                return
+            }
+        }
+        
+        items = []
+    }
 }
 
-struct ExpenseItem: Identifiable {
-    let id = UUID()
+struct ExpenseItem: Identifiable, Codable {
+    var id = UUID()
     let name: String
     let type: String
     let amount: Double
