@@ -44,9 +44,14 @@ struct ContentView: View {
                 Button("Add expense", systemImage: "plus") {
                     showingAddExpense = true
                 }
-                .sheet(isPresented: $showingAddExpense, content: {
+                // Push
+                .navigationDestination(isPresented: $showingAddExpense, destination: {
                     AddExpenseView(expenses: expenses)
                 })
+                // Present Sheet
+//                .sheet(isPresented: $showingAddExpense, content: {
+//                    AddExpenseView(expenses: expenses)
+//                })
             }
         }
     }

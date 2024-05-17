@@ -41,6 +41,15 @@ struct AddExpenseView: View {
                     dismiss()
                 }
             }
+            // In case its a push navigation. 
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", role: .cancel) {
+                        dismiss()
+                    }
+                }
+            }
+            .navigationBarBackButtonHidden()
         }
     }
 }
