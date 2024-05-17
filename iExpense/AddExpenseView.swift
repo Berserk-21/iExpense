@@ -13,7 +13,7 @@ struct AddExpenseView: View {
     
     var expenses: Expenses
     
-    @State private var name = "Edit name"
+    @State private var name = ""
     @State private var type = ExpenseType.business
     @State private var amount = 0.0
     
@@ -33,8 +33,7 @@ struct AddExpenseView: View {
                 TextField("Amount", value: $amount, format: .currency(code: Locale.current.currency?.identifier ?? "USD"))
                     .keyboardType(.decimalPad)
             }
-            .navigationTitle($name)
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Add new expense")
             .toolbar {
                 Button("Save") {
                     let expenseItem = ExpenseItem(name: name, type: type, amount: amount)
