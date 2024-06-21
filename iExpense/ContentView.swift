@@ -10,6 +10,8 @@ import Observation
 
 struct ContentView: View {
     
+    @Environment(\.modelContext) var modelContext
+    
     @State private var expenses = Expenses()
     @State private var showingAddExpense = false
     
@@ -117,13 +119,6 @@ class Expenses {
         
         items = []
     }
-}
-
-struct ExpenseItem: Identifiable, Codable {
-    var id = UUID()
-    let name: String
-    let type: String
-    let amount: Double
 }
 
 #Preview {
