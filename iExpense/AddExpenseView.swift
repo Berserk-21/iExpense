@@ -11,7 +11,9 @@ struct AddExpenseView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    var expenses: Expenses
+    @Environment(\.modelContext) var modelContext
+    
+    var expenses: [ExpenseItem]
     
     @State private var name = ""
     @State private var type = ExpenseType.business
@@ -37,7 +39,8 @@ struct AddExpenseView: View {
             .toolbar {
                 Button("Save") {
                     let expenseItem = ExpenseItem(name: name, type: type, amount: amount)
-                    expenses.items.append(expenseItem)
+                    modelContext.insert(expenseItem)
+                    
                     dismiss()
                 }
             }
@@ -65,5 +68,9 @@ struct ExpenseType {
 }
 
 #Preview {
-    AddExpenseView(expenses: Expenses())
+    AddExpenseView(expenses: [
+        ExpenseItem(name: "Flight ticket", type: ExpenseType.business, amount: 200.0),
+        ExpenseItem(name: "Restaurants", type: ExpenseType.business, amount: 50.0),
+        ExpenseItem(name: "Groceries", type: ExpenseType.personnal, amount: 8),
+    ])
 }
