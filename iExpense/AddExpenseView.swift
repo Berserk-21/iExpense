@@ -56,6 +56,8 @@ struct AddExpenseView: View {
 }
 
 struct ExpenseType {
+    
+    static let all: String = "All"
     static let business: String = "Business"
     static let personnal: String = "Personnal"
     

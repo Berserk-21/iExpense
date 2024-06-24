@@ -19,8 +19,17 @@ struct ExpensesView: View {
     
     // MARK: - Life Cycle
     
-    init(sortOrder: [SortDescriptor<ExpenseItem>]) {
-        _expenses = Query(sort: sortOrder)
+    init(sortOrder: [SortDescriptor<ExpenseItem>], filterType: String) {
+        
+        _expenses = Query(filter: #Predicate<ExpenseItem> { item in
+            
+            if filterType == ExpenseType.all {
+                return true
+            } else {
+                return item.type == filterType
+            }
+
+        }, sort: sortOrder)
     }
     
     // MARK: - Views
@@ -73,5 +82,5 @@ struct ExpensesView: View {
     ExpensesView(sortOrder: [
         SortDescriptor(\ExpenseItem.name),
         SortDescriptor(\ExpenseItem.amount)
-    ])
+    ], filterType: ExpenseType.all)
 }
