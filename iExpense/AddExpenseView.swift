@@ -13,8 +13,6 @@ struct AddExpenseView: View {
     
     @Environment(\.modelContext) var modelContext
     
-    var expenses: [ExpenseItem]
-    
     @State private var name = ""
     @State private var type = ExpenseType.business
     @State private var amount = 0.0
@@ -68,9 +66,5 @@ struct ExpenseType {
 }
 
 #Preview {
-    AddExpenseView(expenses: [
-        ExpenseItem(name: "Flight ticket", type: ExpenseType.business, amount: 200.0),
-        ExpenseItem(name: "Restaurants", type: ExpenseType.business, amount: 50.0),
-        ExpenseItem(name: "Groceries", type: ExpenseType.personnal, amount: 8),
-    ])
+    AddExpenseView()
 }
